@@ -58,6 +58,7 @@ main {
 
 .game-square > p {
   font-size: 4rem;
+  font-weight: bold;
 }
 
 /* Class Styling Rules */
