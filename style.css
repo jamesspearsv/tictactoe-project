@@ -7,8 +7,9 @@
   --color-light: #fbf5f3;
   --font-primary: "Open Sans", sans-serif;
   --height-nav: 9vh;
-  --width-main: min(1100px, 90vw);
-  --size-gameSquare: min(125px, 30vw);
+  --width-main: min(1100px, 87vw);
+  --size-gameSquare: min(125px, 25vw);
+  --size-gameBoardLine: 8px;
 }
 
 body {
@@ -44,12 +45,16 @@ main {
 #game-container {
   display: grid;
   grid-template-columns: repeat(3, var(--size-gameSquare));
+  background-color: var(--color-dark);
+  gap: var(--size-gameBoardLine);
+  max-width: var(--width-main);
+  padding: var(--size-gameBoardLine);
 }
 
 .game-square {
-  border: solid 2px var(--color-dark);
   height: var(--size-gameSquare);
   width: var(--size-gameSquare);
+  background-color: var(--color-light);
 
   display: flex;
   justify-content: center;
@@ -85,4 +90,9 @@ main {
 
 .text-dark {
   color: var(--color-dark);
+}
+
+.winner {
+  background-color: var(--color-primary);
+  color: var(--color-light);
 }
