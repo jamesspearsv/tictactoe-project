@@ -1,22 +1,27 @@
+// Factories
+const Player = (name, marker) => {
+  let numberOfWins = 0;
+
+  const addWin = () => {
+    numberOfWins++;
+  };
+
+  return { name, marker, numberOfWins, addWin };
+};
+
 // Modules
 const Game = (() => {
   let board = Array(9).fill(null);
   let isXTurn = true;
   let isWinner = false;
   let turnCount = 0;
+  let numberOfDraws = 0;
 
   const updateBoard = (id, player) => {
     board[id] = player;
   };
 
-  const resetGame = () => {
-    board = Array(9).fill(null);
-    isXTurn = true;
-    isWinner = false;
-    turnCount = 0;
-  };
-
-  return { board, isXTurn, isWinner, turnCount, updateBoard, resetGame };
+  return { board, isXTurn, isWinner, turnCount, updateBoard };
 })();
 
 const GameController = (() => {
@@ -29,18 +34,17 @@ const GameController = (() => {
       Game.turnCount++;
     }
 
-    const newPiece = document.createElement("p");
-    newPiece.classList.add("marker");
+    let marker = document.getElementById(id).firstElementChild;
+    console.log(`Id: ${id}`);
+    console.log(marker);
 
     if (Game.isXTurn) {
       Game.updateBoard(id, "x");
-      newPiece.innerText = "X";
+      marker.innerText = "X";
     } else {
       Game.updateBoard(id, "o");
-      newPiece.innerText = "O";
+      marker.innerText = "O";
     }
-
-    document.getElementById(id).appendChild(newPiece);
 
     const winner = checkWinner(Game.board);
 
@@ -96,7 +100,6 @@ const GameController = (() => {
       }
     }
 
-    console.log(Game.turnCount);
     if (Game.turnCount === 9) {
       return { line: null, winningMessage: "Game Over! Cat!" };
     }
@@ -105,36 +108,54 @@ const GameController = (() => {
   };
 
   const resetGame = () => {
-    // Game.resetGame();
+    Game.board = Array(9).fill(null);
+    Game.isXTurn = true;
+    Game.isWinner = false;
+    Game.turnCount = 0;
 
     document.querySelectorAll(".game-square").forEach((square) => {
       square.classList.remove("winner");
     });
 
     document.querySelectorAll(".marker").forEach((marker) => {
-      marker.remove();
+      marker.innerText = "";
     });
 
     document.getElementById("game-status").innerText = "Current Turn: X";
   };
 
-  return { makeMove, resetGame };
+  const startGame = () => {
+    document.getElementById("pregame").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+  };
+
+  return { makeMove, resetGame, startGame };
 })();
 
 // DOM Interactions
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".game-square").forEach((square) => {
     square.addEventListener("click", (event) => {
+      // GameController.setGame(event);
       const square = event.target.id;
       GameController.makeMove(square);
     });
   });
 
   document.getElementById("new-game-button").addEventListener("click", () => {
-    const confirmation = confirm("Are you sure you want to reset the game?");
+    const confirmation = confirm("Are you sure you want to start a new game?");
 
     if (confirmation) {
-      window.location.reload();
+      // window.location.reload();
+      GameController.resetGame();
     }
   });
+
+  document
+    .getElementById("pregame-form")
+    .addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      GameController.startGame();
+    });
 });

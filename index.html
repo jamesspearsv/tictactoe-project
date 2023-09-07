@@ -12,17 +12,59 @@
       <button class="button bg-light" id="new-game-button">New Game</button>
     </nav>
     <main>
-      <h1 id="game-status">Current Turn: X</h1>
-      <div id="game-container">
-        <div class="game-square" id="0"></div>
-        <div class="game-square" id="1"></div>
-        <div class="game-square" id="2"></div>
-        <div class="game-square" id="3"></div>
-        <div class="game-square" id="4"></div>
-        <div class="game-square" id="5"></div>
-        <div class="game-square" id="6"></div>
-        <div class="game-square" id="7"></div>
-        <div class="game-square" id="8"></div>
+      <div id="pregame">
+        <h1>Start A New Match!</h1>
+        <form action="" id="pregame-form" class="bg-primary">
+          <label for="player1">Player 1 is "X"</label>
+          <input
+            type="text"
+            name="player1"
+            placeholder="Enter Player 1"
+            autocomplete="off"
+            required
+          />
+          <label for="player2">Player 2 is "O"</label>
+          <input
+            type="text"
+            name="player2"
+            placeholder="Enter Player 2"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" class="button">Start Game</button>
+        </form>
+      </div>
+      <div id="game" class="hidden">
+        <h1 id="game-status">Current Turn: X</h1>
+        <div id="game-container">
+          <div class="game-square" id="0">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="1">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="2">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="3">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="4">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="5">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="6">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="7">
+            <p class="marker"></p>
+          </div>
+          <div class="game-square" id="8">
+            <p class="marker"></p>
+          </div>
+        </div>
       </div>
     </main>
   </body>

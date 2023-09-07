@@ -42,6 +42,20 @@ main {
   justify-content: center;
 }
 
+/* Pregame Styles */
+#pregame {
+}
+
+#pregame-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+/* Game Board Styles */
 #game-container {
   display: grid;
   grid-template-columns: repeat(3, var(--size-gameSquare));
@@ -86,6 +100,10 @@ main {
   border: none;
   border-radius: 10px;
   padding: 1rem;
+}
+
+.hidden {
+  display: none;
 }
 
 .text-dark {
