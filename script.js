@@ -119,19 +119,20 @@ const GameController = (() => {
 })();
 
 // DOM Interactions
-
-document.querySelectorAll(".game-square").forEach((square) => {
-  square.addEventListener("click", (event) => {
-    const square = event.target.id;
-    console.log(square);
-    GameController.makeMove(square);
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".game-square").forEach((square) => {
+    square.addEventListener("click", (event) => {
+      const square = event.target.id;
+      console.log(square);
+      GameController.makeMove(square);
+    });
   });
-});
 
-document.getElementById("new-game-button").addEventListener("click", () => {
-  const confirmation = confirm("Are you sure you want to reset the game?");
+  document.getElementById("new-game-button").addEventListener("click", () => {
+    const confirmation = confirm("Are you sure you want to reset the game?");
 
-  if (confirmation) {
-    window.location.reload();
-  }
+    if (confirmation) {
+      window.location.reload();
+    }
+  });
 });
