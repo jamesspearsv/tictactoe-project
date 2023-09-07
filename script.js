@@ -46,12 +46,14 @@ const GameController = (() => {
 
     if (winner === null) {
       changeTurn();
-    } else {
+    } else if (winner.line != null) {
       for (let id of winner.line) {
         document.getElementById(id).classList.add("winner");
-        document.getElementById("game-status").innerText =
-          winner.winningMessage;
+        winner.winningMessage;
       }
+      document.getElementById("game-status").innerText = winner.winningMessage;
+    } else {
+      document.getElementById("game-status").innerText = winner.winningMessage;
     }
   };
 
@@ -94,6 +96,7 @@ const GameController = (() => {
       }
     }
 
+    console.log(Game.turnCount);
     if (Game.turnCount === 9) {
       return { line: null, winningMessage: "Game Over! Cat!" };
     }
@@ -123,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".game-square").forEach((square) => {
     square.addEventListener("click", (event) => {
       const square = event.target.id;
-      console.log(square);
       GameController.makeMove(square);
     });
   });
