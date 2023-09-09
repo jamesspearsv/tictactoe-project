@@ -21,7 +21,7 @@
             name="player1"
             placeholder="Enter Player 1"
             autocomplete="off"
-            required
+            value="player 1"
           />
           <label for="player2">Player 2 is "O"</label>
           <input
@@ -29,13 +29,13 @@
             name="player2"
             placeholder="Enter Player 2"
             autocomplete="off"
-            required
+            value="player 2"
           />
           <button type="submit" class="button">Start Game</button>
         </form>
       </div>
       <div id="game" class="hidden">
-        <h1 id="game-status">Current Turn: X</h1>
+        <h1 id="game-status">Current Turn: <span id="current-turn">X</span></h1>
         <div id="game-container">
           <div class="game-square" id="0">
             <p class="marker"></p>
@@ -64,6 +64,10 @@
           <div class="game-square" id="8">
             <p class="marker"></p>
           </div>
+        </div>
+        <div id="score-board">
+          <h3>Player 1</h3>
+          <h3>Player 2</h3>
         </div>
       </div>
     </main>

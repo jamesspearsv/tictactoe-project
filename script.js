@@ -12,16 +12,37 @@ const Player = (name, marker) => {
 // Modules
 const Game = (() => {
   let board = Array(9).fill(null);
-  let isXTurn = true;
+  let isPlayer1Turn = true;
   let isWinner = false;
   let turnCount = 0;
   let numberOfDraws = 0;
+  let player1 = null;
+  let player2 = null;
 
-  const updateBoard = (id, player) => {
-    board[id] = player;
+  const updateBoard = (id, marker) => {
+    Game.board[id] = marker;
+    console.log();
   };
 
-  return { board, isXTurn, isWinner, turnCount, updateBoard };
+  const createNewPlayer = (player, number) => {
+    if (number === 1) {
+      Game.player1 = Player(player, "X");
+      console.log("creating player1!");
+    } else {
+      Game.player2 = Player(player, "O");
+      console.log("creating player2!");
+    }
+  };
+  return {
+    board,
+    isPlayer1Turn,
+    isWinner,
+    turnCount,
+    player1,
+    player2,
+    updateBoard,
+    createNewPlayer,
+  };
 })();
 
 const GameController = (() => {
@@ -35,11 +56,10 @@ const GameController = (() => {
     }
 
     let marker = document.getElementById(id).firstElementChild;
-    console.log(`Id: ${id}`);
-    console.log(marker);
 
-    if (Game.isXTurn) {
+    if (Game.isPlayer1Turn) {
       Game.updateBoard(id, "x");
+      console.log("Update board!");
       marker.innerText = "X";
     } else {
       Game.updateBoard(id, "o");
@@ -47,6 +67,7 @@ const GameController = (() => {
     }
 
     const winner = checkWinner(Game.board);
+    console.log(winner);
 
     if (winner === null) {
       changeTurn();
@@ -62,9 +83,9 @@ const GameController = (() => {
   };
 
   const changeTurn = () => {
-    Game.isXTurn = !Game.isXTurn;
+    Game.isPlayer1Turn = !Game.isPlayer1Turn;
 
-    if (Game.isXTurn) {
+    if (Game.isPlayer1Turn) {
       document.getElementById("game-status").innerText = "Current Turn: X";
     } else {
       document.getElementById("game-status").innerText = "Current Turn: 0";
@@ -85,16 +106,18 @@ const GameController = (() => {
 
     let winningMessage = "";
 
-    if (Game.isXTurn) {
-      winningMessage = "Winner is X!";
+    if (Game.isPlayer1Turn) {
+      winningMessage = `Winner is ${Game.player1.name}`;
     } else {
-      winningMessage = "Winner is O";
+      winningMessage = `Winner is ${Game.player2.name}`;
     }
 
-    for (let line of winningBoards) {
+    for (let i = 0; i < winningBoards.length; i++) {
+      const line = winningBoards[i];
       const [a, b, c] = line;
 
-      if (board[a] != null && board[a] === board[b] && board[b] === board[c]) {
+      if (board[a] != null && board[a] == board[b] && board[b] == board[c]) {
+        console.log("Winner!");
         Game.isWinner = true;
         return { line, winningMessage };
       }
@@ -109,7 +132,7 @@ const GameController = (() => {
 
   const resetGame = () => {
     Game.board = Array(9).fill(null);
-    Game.isXTurn = true;
+    Game.isPlayer1Turn = true;
     Game.isWinner = false;
     Game.turnCount = 0;
 
@@ -121,12 +144,16 @@ const GameController = (() => {
       marker.innerText = "";
     });
 
-    document.getElementById("game-status").innerText = "Current Turn: X";
+    const temp = "temp";
+    document.getElementById("game-status").innerText = `Current Turn: ${temp}`;
   };
 
-  const startGame = () => {
+  const startGame = (player1, player2) => {
     document.getElementById("pregame").classList.add("hidden");
     document.getElementById("game").classList.remove("hidden");
+
+    Game.createNewPlayer(player1, 1);
+    Game.createNewPlayer(player2, 2);
   };
 
   return { makeMove, resetGame, startGame };
@@ -146,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmation = confirm("Are you sure you want to start a new game?");
 
     if (confirmation) {
-      // window.location.reload();
       GameController.resetGame();
     }
   });
@@ -154,8 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("pregame-form")
     .addEventListener("submit", (event) => {
+      const form = event.target;
       event.preventDefault();
+      const formData = new FormData(form);
 
-      GameController.startGame();
+      const player1 = formData.get("player1");
+      const player2 = formData.get("player2");
+
+      GameController.startGame(player1, player2);
     });
 });
