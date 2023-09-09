@@ -2,11 +2,7 @@
 const Player = (name, marker) => {
   let numberOfWins = 0;
 
-  const addWin = () => {
-    numberOfWins++;
-  };
-
-  return { name, marker, numberOfWins, addWin };
+  return { name, marker, numberOfWins };
 };
 
 // Modules
@@ -21,18 +17,20 @@ const Game = (() => {
 
   const updateBoard = (id, marker) => {
     Game.board[id] = marker;
-    console.log();
   };
 
   const createNewPlayer = (player, number) => {
     if (number === 1) {
       Game.player1 = Player(player, "X");
-      console.log("creating player1!");
     } else {
       Game.player2 = Player(player, "O");
-      console.log("creating player2!");
     }
   };
+
+  const addWin = (player) => {
+    player.numberOfWins++;
+  };
+
   return {
     board,
     isPlayer1Turn,
@@ -42,6 +40,7 @@ const Game = (() => {
     player2,
     updateBoard,
     createNewPlayer,
+    addWin,
   };
 })();
 
@@ -59,7 +58,6 @@ const GameController = (() => {
 
     if (Game.isPlayer1Turn) {
       Game.updateBoard(id, "x");
-      console.log("Update board!");
       marker.innerText = "X";
     } else {
       Game.updateBoard(id, "o");
@@ -67,7 +65,6 @@ const GameController = (() => {
     }
 
     const winner = checkWinner(Game.board);
-    console.log(winner);
 
     if (winner === null) {
       changeTurn();
@@ -86,9 +83,13 @@ const GameController = (() => {
     Game.isPlayer1Turn = !Game.isPlayer1Turn;
 
     if (Game.isPlayer1Turn) {
-      document.getElementById("game-status").innerText = "Current Turn: X";
+      document.getElementById(
+        "game-status"
+      ).innerText = `Current Turn: ${Game.player1.name}`;
     } else {
-      document.getElementById("game-status").innerText = "Current Turn: 0";
+      document.getElementById(
+        "game-status"
+      ).innerText = `Current Turn: ${Game.player2.name}`;
     }
   };
 
@@ -104,21 +105,29 @@ const GameController = (() => {
       [2, 4, 6],
     ];
 
-    let winningMessage = "";
+    winningPlayer = Game.isPlayer1Turn ? Game.player1.name : Game.player2.name;
 
-    if (Game.isPlayer1Turn) {
-      winningMessage = `Winner is ${Game.player1.name}`;
-    } else {
-      winningMessage = `Winner is ${Game.player2.name}`;
-    }
+    const winningMessage = `The winner is ${winningPlayer}`;
 
     for (let i = 0; i < winningBoards.length; i++) {
       const line = winningBoards[i];
       const [a, b, c] = line;
 
       if (board[a] != null && board[a] == board[b] && board[b] == board[c]) {
-        console.log("Winner!");
         Game.isWinner = true;
+
+        if (Game.isPlayer1Turn) {
+          Game.addWin(Game.player1);
+          document.getElementById(
+            "scoreboard-player1"
+          ).lastElementChild.innerText = Game.player1.numberOfWins;
+        } else {
+          Game.addWin(Game.player2);
+          document.getElementById(
+            "scoreboard-player2"
+          ).lastElementChild.innerText = Game.player2.numberOfWins;
+        }
+
         return { line, winningMessage };
       }
     }
@@ -131,8 +140,14 @@ const GameController = (() => {
   };
 
   const resetGame = () => {
+    const confirmation = confirm("Are you sure you want to start a new game?");
+
+    if (!confirmation) {
+      return;
+    }
+
     Game.board = Array(9).fill(null);
-    Game.isPlayer1Turn = true;
+    Game.isPlayer1Turn = !Game.isPlayer1Turn;
     Game.isWinner = false;
     Game.turnCount = 0;
 
@@ -144,8 +159,13 @@ const GameController = (() => {
       marker.innerText = "";
     });
 
-    const temp = "temp";
-    document.getElementById("game-status").innerText = `Current Turn: ${temp}`;
+    const curentTurn = Game.isPlayer1Turn
+      ? Game.player1.name
+      : Game.player2.name;
+
+    document.getElementById(
+      "game-status"
+    ).innerText = `Current Turn: ${curentTurn}`;
   };
 
   const startGame = (player1, player2) => {
@@ -154,6 +174,16 @@ const GameController = (() => {
 
     Game.createNewPlayer(player1, 1);
     Game.createNewPlayer(player2, 2);
+
+    document.getElementById(
+      "game-status"
+    ).innerText = `Current Turn: ${Game.player1.name}`;
+
+    document.getElementById("scoreboard-player1").firstElementChild.innerText =
+      Game.player1.name;
+
+    document.getElementById("scoreboard-player2").firstElementChild.innerText =
+      Game.player2.name;
   };
 
   return { makeMove, resetGame, startGame };
@@ -169,13 +199,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document.getElementById("new-game-button").addEventListener("click", () => {
-    const confirmation = confirm("Are you sure you want to start a new game?");
-
-    if (confirmation) {
-      GameController.resetGame();
-    }
-  });
+  document
+    .getElementById("new-game-button")
+    .addEventListener("click", GameController.resetGame);
 
   document
     .getElementById("pregame-form")

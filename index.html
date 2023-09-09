@@ -14,28 +14,32 @@
     <main>
       <div id="pregame">
         <h1>Start A New Match!</h1>
-        <form action="" id="pregame-form" class="bg-primary">
-          <label for="player1">Player 1 is "X"</label>
+        <form action="" id="pregame-form" class="bg-primary ui-card">
+          <label for="player1">Who is "X"?</label>
           <input
             type="text"
             name="player1"
+            class="form-input"
             placeholder="Enter Player 1"
             autocomplete="off"
-            value="player 1"
+            maxlength="10"
+            required
           />
-          <label for="player2">Player 2 is "O"</label>
+          <label for="player2">Who is "O"?</label>
           <input
             type="text"
             name="player2"
+            class="form-input"
             placeholder="Enter Player 2"
             autocomplete="off"
-            value="player 2"
+            maxlength="10"
+            required
           />
-          <button type="submit" class="button">Start Game</button>
+          <button type="submit" class="button bg-light">Start Game</button>
         </form>
       </div>
       <div id="game" class="hidden">
-        <h1 id="game-status">Current Turn: <span id="current-turn">X</span></h1>
+        <h1 id="game-status"></h1>
         <div id="game-container">
           <div class="game-square" id="0">
             <p class="marker"></p>
@@ -65,9 +69,16 @@
             <p class="marker"></p>
           </div>
         </div>
-        <div id="score-board">
-          <h3>Player 1</h3>
-          <h3>Player 2</h3>
+        <h2>Score Board</h2>
+        <div id="score-board" class="bg-primary ui-card">
+          <div id="scoreboard-player1" class="player-score">
+            <h3></h3>
+            <p class="score">0</p>
+          </div>
+          <div id="scoreboard-player2" class="player-score">
+            <h3></h3>
+            <p class="score">0</p>
+          </div>
         </div>
       </div>
     </main>

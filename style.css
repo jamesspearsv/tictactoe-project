@@ -8,8 +8,9 @@
   --font-primary: "Open Sans", sans-serif;
   --height-nav: 9vh;
   --width-main: min(1100px, 87vw);
-  --size-gameSquare: min(125px, 25vw);
+  --size-gameSquare: min(125px, 27vw);
   --size-gameBoardLine: 8px;
+  --size-border-radius: 10px;
 }
 
 body {
@@ -51,8 +52,6 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
 }
 
 /* Game Board Styles */
@@ -80,6 +79,12 @@ main {
   font-weight: bold;
 }
 
+#score-board {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
 /* Class Styling Rules */
 .bg-light {
   background-color: var(--color-light);
@@ -98,16 +103,43 @@ main {
 
 .button {
   border: none;
-  border-radius: 10px;
+  border-radius: var(--size-border-radius);
   padding: 1rem;
+  font-family: var(--font-primary);
+}
+
+.button:hover {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+}
+
+.form-input {
+  padding: 1rem;
+  font-family: var(--font-primary);
+  border: none;
+  border-radius: var(--size-border-radius);
 }
 
 .hidden {
   display: none;
 }
 
+.player-score {
+  display: flex;
+  flex-direction: column;
+}
+
+.score {
+  font-weight: bold;
+}
+
 .text-dark {
   color: var(--color-dark);
+}
+
+.ui-card {
+  padding: 1rem;
+  border-radius: var(--size-border-radius);
 }
 
 .winner {
